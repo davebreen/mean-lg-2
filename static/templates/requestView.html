@@ -1,0 +1,102 @@
+<div class="overflow-div">
+  <div class="panel-body request-panel-body">
+    <p class="no-requests-note" ng-if="RC.requests.length === 0">There are no licence requests. Click the button to create one.</p>
+    <button
+    ng-if="RC.currentUser.permissions.request"
+    class="btn btn-default request-btn col-md-3 col-lg-2 col-sm-4 col-xs-4"
+    ng-click="RC.makeNewRequest=!RC.makeNewRequest">{{ RC.makeNewRequest ? "Close": "New" }}</button>
+  </div>
+  <div ng-if="RC.requests.length > 0 && !RC.makeNewRequest">
+    <table class="table table-striped table-condensed request-table">
+      <tr>
+        <th>Customer <span class="glyphicon glyphicon-chevron-down order-icons" ng-click="RC.requestOrder='customer'"></span></th>
+        <th>No. of Users <span class="glyphicon glyphicon-chevron-down order-icons" ng-click="RC.requestOrder='numberOfUsers'"></span></th>
+        <th>Batch Users <span class="glyphicon glyphicon-chevron-down order-icons" ng-click="RC.requestOrder='numberOfBatchUsers'"></span></th>
+        <th>Expiration <span class="glyphicon glyphicon-chevron-down order-icons" ng-click="RC.requestOrder='expiration'"></span></th>
+        <th>Components <span class="glyphicon glyphicon-chevron-down order-icons" ng-click="RC.requestOrder='components.length'"></span></th>
+        <th>Other </th>
+        <th>Status <span class="glyphicon glyphicon-chevron-down order-icons" ng-click="RC.requestOrder='licenseKey'"></span></th>
+        <th><strong>View/Edit</strong></th>
+      </tr>
+      <tr ng-init="RC.requestOrder='customer'" ng-repeat="request in RC.requests | orderBy : RC.requestOrder">
+        <td ng-click="RC.selectCustomer=request.customer;RC.getCustomerRequests()">{{ request.customer }}</td>
+        <td>{{ request.numberOfUsers }}</td>
+        <td>{{ request.numberOfBatchUsers }}</td>
+        <td>{{ RC.convertMS(request.expiration) }}</td>
+        <td>{{ request.components.length }}</td>
+        <td>
+          <div>
+            <label ng-if="request.development"><em>Dev Use</em></label>
+            <label ng-if="request.billable"><em>Billable</em></label>
+          </div>
+        </td>
+        <td ng-if="request.licenseKey !== null" class="request-accept"></span>
+          <button ng-click="RC.downloadLicense(request.customer,request.uid)" class="btn btn-success">Download</button>
+        </td>
+        <td ng-if="request.licenseKey === null" class="request-unknown">
+          <span ng-if="!RC.currentUser.permissions.approve" class="glyphicon glyphicon-question-sign"></span>
+          <button ng-if="RC.currentUser.permissions.approve" class="btn btn-warning" ng-click="RC.getApproval(request.uid)">Approve</button>
+        </td>
+        <td>
+          <button class="btn btn-primary" ng-click="RC.selectRequest(request)">View</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="modal-dialog modal-lg license-request-form" ng-if="RC.makeNewRequest">
+    <form class="ng-pristine ng-valid" role="form" name="licenseRequestForm">
+      <table>
+        <tr>
+          <th>Customer</th><th>No. of Users</th><th>Expiration</th><th>Components</th><th>Accounting</th>
+        </tr>
+        <tr class="license-values">
+          <td>
+            <div>
+              <select class="form-control ng-pristine ng-valid" ng-class="{'component-selected': selected }" ng-model="RC.defineRequest.customer" ng-required="RC.makeNewRequest" ng-trim="true" ng-options="customer.code for customer in RC.customers" autofocus>
+              </select>
+              <input type="text" class="form-control ng-pristine" ng-model="RC.defineRequest.customerContact" ng-trim="true" placeholder="Customer Contact">
+              </select>
+            </div>
+          </td>
+          <td>
+            <div>
+              <input type="text" class="form-control ng-pristine ng-valid" ng-model="RC.defineRequest.numberOfUsers" ng-required="RC.makeNewRequest" ng-trim="true" placeholder="Standard Users">
+              <input type="text" class="form-control ng-pristine ng-valid" ng-model="RC.defineRequest.numberOfBatchUsers" ng-required="RC.makeNewRequest" ng-trim="true" placeholder="Batch Users">
+            </div>
+          </td>
+          <td>
+            <input type="text" class="form-control ng-pristine ng-valid" ng-class="{ 'date-error': RC.badDateFormat || RC.badDateExpiry}" ng-model="RC.defineRequest.expiration" placeholder="DD/MM/YYYY" ng-required="RC.makeNewRequest" ng-trim="true" ng-keydown="RC.badDateFormat=false;RC.badDateExpiry=false" ng-keyup="RC.addSlash()">
+            <input type="text" class="form-control ng-pristine" ng-model="RC.defineRequest.reason" ng-trim="true" placeholder="Reason For Request">
+            <p ng-if="RC.badDateFormat">
+              Date format must be **/**/****
+            </p>
+            <p ng-if="RC.badDateExpiry">
+              Date must be more than a year from today.
+            </p>
+          </td>
+          <td>
+            <div class="columns">
+              <ul ng-repeat="component in RC.components" class="hidden-bullets" dir="rtl">
+                <li class="component-selection-list-item" ng-click="selected=(!selected);RC.manageComponents(component, selected)" ng-init="selected=false" ng-class="{'component-selected': selected }">
+                  {{ component.requestName }}
+                  <div ng-if="component.requestName === 'Comp_003'">
+                    <input class="request-units" type="text" placeholder="Units" ng-required="RC.makeNewRequest && $parent.selected === true" ng-model="RC.wsUnits" ng-click="$parent.selected ? $parent.selected = false:$parent.selected = true" ng-disabled="$parent.selected === false" dir="ltr">
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </td>
+          <td>
+            <div>
+              <input type="radio" name="accounting" value="dev" ng-model="RC.isDevelopment"> <em>Dev&nbsp;Use</em><br>
+              <input type="radio" name="accounting" value="bill" ng-model="RC.isBillable"> <em>Billable</em>
+            </div>
+          </td>
+        </tr>
+      </table>
+      <div>
+        <button style="float: right;" type="submit" class="btn btn-primary" ng-click="">Submit Request</button>
+      </div>
+    </form>
+  </div>
+</div>

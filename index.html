@@ -1,0 +1,32 @@
+<!doctype html>
+<html data-debug ng-app="licenseGeneratorApp">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>License Generator</title>
+    <!-- Bootstrap v3.3.7 -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/licenseGeneratorApp.css">
+</head>
+<body ng-controller="MainController as MC" ng-init="MC.init()">
+  <sign-in-component ng-if="!MC.isAuthenticated" app-title="MC.appTitle" ng-cloak></sign-in-component>
+  <div ng-if="MC.isAuthenticated" ng-include="'templates/mainView.html'" ng-cloak></div>
+  <div ng-include="'templates/footer.html'" ng-cloak></div>
+  <!-- jQuery v3.1.1 -->
+  <script src="js/libs/jquery.min.js"></script>
+  <!-- Bootstrap v3.3.7 -->
+  <script src="js/libs/bootstrap.js"></script>
+  <!-- AngularJS v1.6.1 -->
+  <script src="js/libs/angular.min.js"></script>
+  <script src="js/licenseGeneratorApp.js"></script>
+  <script src="js/services/authentication.service.js"></script>
+  <script src="js/services/model.service.js"></script>
+  <script src="js/services/utility.service.js"></script>
+  <script src="js/controllers/login.controller.js"></script>
+  <script src="js/controllers/main.controller.js"></script>
+  <script src="js/controllers/user.controller.js"></script>
+  <script src="js/controllers/request.controller.js"></script>
+  <script src="js/controllers/customer.controller.js"></script>
+  <script src="js/controllers/component.controller.js"></script>
+</body>
+</html>

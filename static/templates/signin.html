@@ -1,0 +1,31 @@
+<div class="main-frame sign-in-frame" ng-init="MainC.siginInit()">
+  <div class="container form-frame">
+    <form class="form-signin ng-pristine ng-valid" role="form" ng-submit="LC.submitAuth()">
+      <div class="signin-header-container">
+        <div class="form-signin-heading">{{ LC.appTitle }}</div>
+        <div class="signin-logo"></div>
+      </div>
+      <input
+        type="text"
+        class="form-control ng-pristine ng-valid"
+        ng-model="LC.username"
+        id="username"
+        name="username"
+        placeholder="Username"
+        ng-required="true"
+        ng-trim="true"
+        autofocus>
+      <input
+        type="password"
+        class="form-control ng-pristine ng-valid"
+        ng-model="LC.password"
+        id="password"
+        name="password"
+        placeholder="Password"
+        ng-required="true"
+        ng-trim="true">
+      <label class="alert alert-danger login-failed" ng-if="LC.loginFailed"><span class="glyphicon glyphicon-exclamation-sign"></span> Authentication failed.</label>
+      <button class="btn btn-lg login-btn btn-block" type="submit">Sign in</button>
+    </form>
+  </div><!--  END FORM-FRAME -->
+</div>
