@@ -1,0 +1,82 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title" id="viewLicenseModalTitle">License Request</h5>
+    <button type="button" class="close" data-dismiss="modal" ng-click="SC.clearAll();SC.clearRequest()">
+      <span>&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <div>
+        <label class="request-labels">Customer: </label>
+        <input type="checkbox" class="request-edit-check" ng-model="SC.updateRequest.customer" ng-if="SC.defineRequest.licenseKey === null && SC.currentUser.permissions.request">
+        <input type="text" class="current-request-value" ng-model="SC.defineRequest.customer" ng-disabled="!SC.updateRequest.customer" ng-if="SC.defineRequest.licenseKey !== null">
+        <select class="current-request-value" ng-model="SC.defineRequest.customer" ng-required="true" ng-trim="true" ng-options="customer.name for customer in SC.customers" ng-disabled="!SC.updateRequest.customer" ng-if="SC.defineRequest.licenseKey === null">
+        </select>
+      </div>
+      <div>
+        <label for="request.users" class="request-labels">Number of Users: </label>
+        <input type="checkbox" class="request-edit-check" ng-model="SC.updateRequest.users" ng-if="SC.defineRequest.licenseKey === null && SC.currentUser.permissions.request">
+        <input type="text" id="request.users" class="current-request-value" ng-model="SC.defineRequest.numberOfUsers" ng-disabled="!SC.updateRequest.users">
+      </div>
+      <div>
+        <label for="request.users" class="request-labels">Batch Users: </label>
+        <input type="checkbox" class="request-edit-check" ng-model="SC.updateRequest.batch" ng-if="SC.defineRequest.licenseKey === null && SC.currentUser.permissions.request">
+        <input type="text" id="request.users" class="current-request-value" ng-model="SC.defineRequest.numberOfBatchUsers" ng-disabled="!SC.updateRequest.batch">
+      </div>
+      <div>
+        <label for="request.billable" class="request-labels" ng-class="{'deselected': !SC.defineRequest.billable }">Billable: </label>
+        <input type="checkbox" class="request-edit-check" ng-model="SC.defineRequest.billable" ng-if="SC.defineRequest.licenseKey === null && SC.currentUser.permissions.request" ng-change="SC.updateRequest.billable=!SC.updateRequest.billable">
+      </div>
+      <div>
+        <label for="request.development" class="request-labels" ng-class="{'deselected': !SC.defineRequest.development }">Development: </label>
+        <input type="checkbox" class="request-edit-check" ng-model="SC.defineRequest.development" ng-if="SC.defineRequest.licenseKey === null && SC.currentUser.permissions.request" ng-change="SC.updateRequest.development=!SC.updateRequest.development">
+      </div>
+      <div>
+        <label for="request.date" class="request-labels">Expiration Date: </label>
+        <input type="checkbox" class="request-edit-check" ng-model="SC.updateRequest.date" ng-if="SC.defineRequest.licenseKey === null && SC.currentUser.permissions.request">
+        <input type="text" id="request.date" class="current-request-value" ng-model="SC.defineRequest.expirationToDate" ng-disabled="!SC.updateRequest.date">
+      </div>
+      <div>
+        <label for="requestComponents" class="request-labels"><span ng-click="SC.toggleCollapse('#requestComponents')">Components:</span></label>
+        <ul id="requestComponents" ng-repeat="component in SC.allComponents" class="hidden-bullets" dir="rtl">
+          <li class="component-selection-list-item {{ SC.currentComponents.indexOf(component.uid) > -1 ? 'component-selected' : '' }}">
+            {{ component.requestName }}
+            <div ng-if="component.requestName === 'Web Services Composer'">
+              <input class="request-units" type="text" placeholder="Units" ng-required="$parent.selected === true" ng-model="SC.wsUnits" ng-click="$parent.selected ? $parent.selected = false:$parent.selected = true" ng-disabled="$parent.selected === false" dir="ltr">
+            </div>
+            <input type="checkbox" class="edit-component-check user-edit-check" ng-model="includeComponent" ng-click="SC.manageComponents(component, includeComponent)" ng-checked="SC.currentComponents.indexOf(component.uid) > -1">
+          </li>
+        </ul>
+      </div>
+      <div class="bottom-spacer">
+        <button type="button" class="btn btn-secondary comment-button" data-toggle="collapse" data-target="#commentTarget">Add A Comment</button>
+        <label for="requestComments" class="request-labels"><span ng-click="SC.toggleCollapse('#requestComments')">Comments:</span></label>
+        <div id="commentTarget" class="collapse comment-control collapse-on-close bottom-spacer">
+          <label>Message: </label>
+          <textarea id="newComment" class="comment-box alert-success" ng-model="SC.newComment"></textarea>
+          <button type="button" class="btn btn-success add-comment" ng-click="SC.submitComment(SC.defineRequest.uid)">Add</button>
+        </div>
+      </div>
+      <div class="bottom-spacer">
+        <ul id="requestComments" class="collapse hidden-bullets collapse-on-close" ng-if="SC.requestComments.length > 0">
+          <li ng-repeat="comment in SC.requestComments">
+            <div class="comment-list-item">
+              <span class="comment-list-message">{{ comment.message }}</span>
+              <span class="comment-list-timestamp">{{ SC.convertMS(comment.timestamp) }}</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <div class="pending-note" ng-if="SC.defineRequest.licenseKey === null">Pending Approval</div>
+        <label class="request-labels"><span ng-click="SC.toggleCollapse('#requestSignature')">License Key:</span></label>
+        <pre id="requestSignature" class="collapse signature-wrap collapse-on-close" ng-if="SC.defineRequest.licenseKey !== null">{{ SC.defineRequest.licenseKey }}</pre>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="SC.clearAll();SC.clearRequest()">Close</button>
+    <button ng-if="SC.currentUser.permissions.request" type="button" class="btn btn-primary" data-dismiss="modal" ng-click="SC.editRequest()" ng-disabled="SC.defineRequest.licenseKey !== null">Edit Request</button>
+  </div>
+</div>

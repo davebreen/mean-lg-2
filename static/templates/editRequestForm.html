@@ -1,0 +1,92 @@
+<div class="modal-dialog modal-lg license-request-form">
+  <form class="ng-pristine ng-valid" role="form" name="editRequestForm">
+    <table>
+      <tr>
+        <th>Customer</th><th>No. of Users</th><th>Expiration</th><th>Components</th><th>Accounting</th>
+      </tr>
+      <tr class="license-values">
+        <td>
+          <div>
+            <select class="form-control ng-pristine ng-valid" ng-class="{'component-selected': selected }" ng-model="RC.defineRequest.customer" ng-required="RC.updateRequest" ng-trim="true" ng-options="customer for customer in RC.customerCodes" autofocus>
+            </select>
+            <input type="text" class="form-control ng-pristine" ng-model="RC.defineRequest.customerContact" ng-trim="true" placeholder="Customer Contact">
+            </select>
+          </div>
+        </td>
+        <td>
+          <div>
+            <input type="text" class="form-control ng-pristine ng-valid" ng-model="RC.defineRequest.numberOfUsers" ng-required="RC.updateRequest" ng-trim="true" placeholder="Standard Users">
+            <input type="text" class="form-control ng-pristine ng-valid" ng-model="RC.defineRequest.numberOfBatchUsers" ng-required="RC.updateRequest" ng-trim="true" placeholder="Batch Users">
+          </div>
+        </td>
+        <td>
+          <input
+
+          type="text"
+          class="form-control ng-pristine ng-valid"
+          ng-class="{ 'date-error': RC.badDateFormat || RC.badDateExpiry}"
+          ng-model="RC.updateExpiration"
+          placeholder="DD/MM/YYYY"
+          ng-required="RC.updateRequest"
+          ng-trim="true"
+          ng-mousedown="RC.updateExpiration=''"
+          ng-keydown="RC.badDateFormat=false;RC.badDateExpiry=false"
+          ng-keyup="RC.addSlash()"
+          ng-value="RC.convertMS(RC.defineRequest.expiration)">
+
+          <input type="text" class="form-control ng-pristine" ng-model="RC.defineRequest.reason" ng-trim="true" placeholder="Reason For Request">
+          <p ng-if="RC.badDateFormat">
+            Date format must be **/**/****
+          </p>
+          <p ng-if="RC.badDateExpiry">
+            Date must be more than a week from today.
+          </p>
+          <p ng-if="RC.noComponents">
+            You must select at least 1 component.
+          </p>
+        </td>
+        <td>
+          <div class="columns">
+            <ul ng-repeat="component in RC.components" class="hidden-bullets" dir="rtl">
+              <li class="component-selection-list-item" ng-click="selected=(!selected);RC.manageComponents(component, selected);RC.noComponents=false" ng-class="{'component-selected': (RC.requestComponents.indexOf(component.uid)>-1) || selected, 'date-error': RC.noComponents }" ng-init="selected=(RC.requestComponents.indexOf(component.uid)>-1)">
+                {{ component.requestName }}
+                <div ng-if="component.requestName === 'Web Services Composer'">
+                  <input class="request-units" type="text" placeholder="Units" ng-required="$parent.selected" ng-model="RC.wsUnits" ng-click="$parent.selected=(!$parent.selected)" ng-disabled="!$parent.selected" dir="ltr">
+                </div>
+              </li>
+            </ul>
+          </div>
+        </td>
+        <td>
+          <div>
+            <input type="radio" name="accounting" ng-value="true" ng-model="RC.defineRequest.development"> <em>Dev&nbsp;Use</em><br>
+            <input type="radio" name="accounting" ng-value="true" ng-model="RC.defineRequest.billable"> <em>Billable</em>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <div>
+      <button style="float: right;" type="submit" class="btn btn-primary" ng-click="editRequestForm.$valid && RC.validateUpdate() && RC.editRequest()" ng-disabled="RC.defineRequest.licenseKey !== null">Update Request</button>
+    </div>
+    <div class="bottom-spacer">
+      <label for="requestComments" class="request-labels">Comments:</label>
+      <button type="button" class="btn btn-secondary comment-button" data-toggle="collapse" data-target="#commentTarget">Add A Comment</button>
+      <div id="commentTarget" class="collapse comment-control collapse-on-close bottom-spacer">
+        <label>Message: </label>
+        <textarea id="newComment" class="comment-box alert-success" ng-model="RC.newComment"></textarea>
+        <button type="button" class="btn btn-success add-comment" ng-click="RC.submitComment(RC.defineRequest.uid);RC.toggleCollapse('#commentTarget')">Add</button>
+      </div>
+    </div>
+    <div class="bottom-spacer overflow-div">
+      <ul ng-if="RC.requestComments.length > 0">
+        <li ng-repeat="comment in RC.requestComments">
+          <div class="comment-list-item">
+            <span class="comment-list-message">{{ comment.message }}</span>
+            <span class="comment-list-timestamp">{{ RC.convertMS(comment.timestamp) }}</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </form>
+</div>
+</div>

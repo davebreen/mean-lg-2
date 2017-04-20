@@ -3,8 +3,8 @@
     <button class="btn btn-default logout-button" ng-controller="LoginController as LC" ng-click="LC.logout()" ng-show="true" ng-cloak>{{ MC.currentUser.username }}: Logout</button>
     <h4 class="main-header-admin">{{ MC.appTitle }}</h4>
   </div>
-  <div class="control-top container col-md-12 col-lg-12 col-sm-12 col-xs-12">
-    <div class="panel panel-danger panel-left">
+  <div class="container col-md-12 col-lg-12 col-sm-12 col-xs-12">
+    <div class="panel panel-danger control-top">
       <div class="panel-heading col-md-12 col-lg-12 col-sm-12 col-xs-12">
       </div>
       <div class="panel-body request-panel-body">
@@ -27,6 +27,6 @@
           <component-component current-user="MC.currentUser"></component-component>
         </div>
       </div>
-    </div><!-- END LEFT PANEL -->
-  </div><!-- END CONTROL TOP -->
+    </div>
+  </div>
 </div>

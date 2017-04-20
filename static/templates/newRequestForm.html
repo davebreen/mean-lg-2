@@ -1,0 +1,61 @@
+<div class="modal-dialog modal-lg license-request-form">
+  <form class="ng-pristine ng-valid" role="form" name="licenseRequestForm">
+    <table>
+      <tr>
+        <th>Customer</th><th>No. of Users</th><th>Expiration</th><th>Components</th><th>Accounting</th>
+      </tr>
+      <tr class="license-values">
+        <td>
+          <div>
+            <select class="form-control ng-pristine ng-valid" ng-class="{'component-selected': selected }" ng-model="RC.defineRequest.customer" ng-required="RC.makeNewRequest" ng-trim="true" ng-options="customer.code for customer in RC.customers" autofocus>
+            </select>
+            <input type="text" class="form-control ng-pristine" ng-model="RC.defineRequest.customerContact" ng-trim="true" placeholder="Customer Contact">
+            </select>
+          </div>
+        </td>
+        <td>
+          <div>
+            <input type="text" class="form-control ng-pristine ng-valid" ng-model="RC.defineRequest.numberOfUsers" ng-required="RC.makeNewRequest" ng-trim="true" placeholder="Standard Users">
+            <input type="text" class="form-control ng-pristine ng-valid" ng-model="RC.defineRequest.numberOfBatchUsers" ng-required="RC.makeNewRequest" ng-trim="true" placeholder="Batch Users">
+          </div>
+        </td>
+        <td>
+          <input type="text" class="form-control ng-pristine ng-valid" ng-class="{ 'date-error': RC.badDateFormat || RC.badDateExpiry}" ng-model="RC.defineRequest.expiration" placeholder="DD/MM/YYYY" ng-required="RC.makeNewRequest" ng-trim="true" ng-keydown="RC.badDateFormat=false;RC.badDateExpiry=false" ng-keyup="RC.addSlash()">
+          <input type="text" class="form-control ng-pristine" ng-model="RC.defineRequest.reason" ng-trim="true" placeholder="Reason For Request">
+          <p ng-if="RC.badDateFormat">
+            Date format must be **/**/****
+          </p>
+          <p ng-if="RC.badDateExpiry">
+            Date must be more than a week from today.
+          </p>
+          <p ng-if="RC.noComponents">
+            You must select at least 1 component.
+          </p>
+        </td>
+        <td>
+          <div class="columns">
+            <ul ng-repeat="component in RC.components" class="hidden-bullets" dir="rtl">
+              <li class="component-selection-list-item" ng-click="selected=(!selected);RC.manageComponents(component, selected);RC.noComponents=false" ng-init="selected=false" ng-class="{'component-selected': selected, 'date-error': RC.noComponents }">
+                {{ component.requestName }}
+                <div ng-if="component.requestName === 'Web Services Composer'">
+                  <input id="webServiceUnits" class="request-units" type="text" placeholder="Units" ng-required="$parent.selected" ng-model="RC.wsUnits" ng-disabled="true" dir="ltr">
+                </div>
+              </li>
+            </ul>
+          </div>
+        </td>
+        <td>
+          <div>
+            <input type="radio" name="accounting" value="true" ng-model="RC.defineRequest.development"> <em>Dev&nbsp;Use</em><br>
+            <input type="radio" name="accounting" value="true" ng-model="RC.defineRequest.billable"> <em>Billable</em>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <div>
+      <button style="float: right;" type="submit" class="btn btn-primary" ng-click="licenseRequestForm.$valid && RC.validateRequest() && RC.newRequest()">Submit Request</button>
+    </div>
+  </form>
+</div>
+</div>

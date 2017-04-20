@@ -15,6 +15,7 @@ angular.module('mainController', [])
   this.getRequests = function () {
     ModelService.get(MODEL_PATHS.licensePath, self.currentUser.authToken)
     .then(function(response) {
+      console.log("MainC.SetUp: getLicenses: " + JSON.stringify(response.licenseRequestModels));
       $scope.$broadcast(APP_EVENTS.requestUpdates, response.licenseRequestModels);
     }, function (error) {
       console.log("MainC.SetUp: getLicenses FAILED: " + JSON.stringify(error));
@@ -48,10 +49,6 @@ angular.module('mainController', [])
     }, function (error) {
       console.log("MainC.SetUp: getCustomers FAILED: " + JSON.stringify(error));
     });
-  };
-
-  this.setCurrentUser = function (user) {
-    self.currentUser = user;
   };
 
   this.setUp = function (userRole) {
@@ -95,8 +92,7 @@ angular.module('mainController', [])
     console.log('MainController.$on(AUTH_PROPERTIES.loginFailed)');
   });
   $scope.$on(AUTH_PROPERTIES.currentUserChanged, function (event, newDetails) {
-    console.log('MainController.$on(AUTH_PROPERTIES.currentUserChanged)');
-    self.setCurrentUser(newDetails);
+    self.currentUser = AuthService.updateSession(newDetails);
   });
   $scope.$on(AUTH_PROPERTIES.logoutSuccess, function () {
     console.log('MainController' + AuthService.isAuthenticated());

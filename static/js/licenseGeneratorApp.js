@@ -15,6 +15,7 @@ angular.module('licenseGeneratorApp', [
   controller: 'LoginController',
   controllerAs: 'LC',
   bindings : {
+    appTitle : "<",
     currentUser : "<"
   }
 })
@@ -54,12 +55,6 @@ angular.module('licenseGeneratorApp', [
   }
 })
 .constant('APP_PROPERTIES', {
-  customerList: [
-
-  ],
-  componentList: [
-
-  ],
   permissionList: [
     "APPROVE",
     "REQUEST"
