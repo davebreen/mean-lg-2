@@ -2,20 +2,20 @@
   <form class="ng-pristine ng-valid" role="form" name="userForm">
     <table>
       <tr>
-        <th>Username</th><th>First Name</th><th>Last Name</th><th><span ng-if="UC.modifyUser">Change </span>Password <input ng-if="UC.modifyUser" type="checkbox" ng-click="UC.changePassword=!UC.changePassword"></th>
+        <th>Username</th><th>First Name</th><th>Last Name</th><th><span ng-if="UC.modifyUser">Change </span>Password <input ng-if="UC.modifyUser" type="checkbox" ng-click="UC.changePassword=!UC.changePassword;UC.defineUser.password='';UC.passwordMatch='';UC.mismatch=false"></th>
       </tr>
       <tr class="user-values">
-        <td><input type="text" class="form-control ng-pristine ng-valid" ng-model="UC.defineUser.username" ng-required="true" ng-trim="true" autofocus></td>
-        <td><input type="text" class="form-control ng-pristine ng-valid" ng-model="UC.defineUser.firstName" ng-required="true" ng-trim="true"></td>
-        <td><input type="text" class="form-control ng-pristine ng-valid" ng-model="UC.defineUser.lastName" ng-required="true" ng-trim="true"></td>
-        <td><input type="password" ng-class="{'password-error': UC.mismatch }" class="form-control ng-pristine ng-valid" ng-model="UC.defineUser.password" ng-required="UC.defineUser===undefined || UC.changePassword" ng-trim="true" ng-keydown="UC.mismatch = false" ng-disabled="UC.modifyUser && !UC.changePassword"></td>
+        <td><input type="text" class="form-control ng-pristine ng-valid" ng-model="UC.defineUser.username" ng-required="true" ng-trim="true" autofocus tabindex='1'></td>
+        <td><input type="text" class="form-control ng-pristine ng-valid" ng-model="UC.defineUser.firstName" ng-required="true" ng-trim="true" tabindex='2'></td>
+        <td><input type="text" class="form-control ng-pristine ng-valid" ng-model="UC.defineUser.lastName" ng-required="true" ng-trim="true" tabindex='3'></td>
+        <td><input type="password" ng-class="{'password-error': UC.mismatch }" class="form-control ng-pristine ng-valid" ng-model="UC.defineUser.password" ng-required="UC.defineUser===undefined || UC.changePassword" ng-trim="true" ng-keydown="UC.mismatch = false" ng-disabled="UC.modifyUser && !UC.changePassword" tabindex='4'></td>
       </tr>
       <tr>
         <th>e-mail</th><th>Role</th><th>Permissions</th><th>Confirm Password</th>
       </tr>
       <tr class="user-values">
         <td>
-          <input type="email" class="form-control ng-pristine ng-valid" ng-model="UC.defineUser.email" ng-required="true" ng-trim="true">
+          <input type="email" class="form-control ng-pristine ng-valid" ng-model="UC.defineUser.email" ng-required="true" ng-trim="true" tabindex='6'>
         </td>
         <td>
           <select class="form-control ng-pristine ng-valid" ng-attr-size="{{ UC.roleList.length + 1 }}" ng-model="UC.defineUser.role" ng-options="role for role in UC.roleList" ng-required="true" ng-trim="true" ng-init="UC.defineUser.role=UC.defineUser.role || 'ADMIN'">
@@ -27,8 +27,8 @@
         </td>
         <td>
           <div>
-            <input type="password" ng-class="{'password-error': UC.mismatch }" class="form-control ng-pristine ng-valid" ng-model="UC.passwordMatch" ng-required="UC.defineUser===undefined || UC.changePassword" ng-trim="true" ng-keydown="UC.mismatch = false" ng-disabled="UC.modifyUser && !UC.changePassword">
-            <label ng-if="UC.mismatch && UC.changePassword" class="password-update-error">Passwords do not match!</label>
+            <input type="password" ng-class="{'password-error': UC.mismatch }" class="form-control ng-pristine ng-valid" ng-model="UC.passwordMatch" ng-required="UC.defineUser===undefined || UC.changePassword" ng-trim="true" ng-keydown="UC.mismatch = false" ng-disabled="UC.modifyUser && !UC.changePassword" tabindex='5'>
+            <label ng-if="UC.mismatch" class="password-update-error">Passwords do not match!</label>
           </div>
         </td>
       </tr>

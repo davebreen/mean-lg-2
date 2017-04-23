@@ -66,7 +66,7 @@
       </tr>
     </table>
     <div>
-      <button style="float: right;" type="submit" class="btn btn-primary" ng-click="editRequestForm.$valid && RC.validateUpdate() && RC.editRequest()" ng-disabled="RC.defineRequest.licenseKey !== null">Update Request</button>
+      <button style="float: right;" type="submit" class="btn btn-primary" ng-click="editRequestForm.$valid && RC.validateUpdate() && RC.editRequest()" ng-disabled="RC.defineRequest.licenseKey !== null || !RC.currentUser.permissions.request">Update Request</button>
     </div>
     <div class="bottom-spacer">
       <label for="requestComments" class="request-labels">Comments:</label>

@@ -62,9 +62,15 @@ angular.module('requestController', [])
   }
 
   this.clearRequest = function() {
+    self.makeNewRequest = false;
+    self.updateRequest = false;
     self.defineRequest = {};
-    self.requestComponents = [];
+    self.newComment = '';
     self.requestComments = [];
+    self.badDateFormat = false;
+    self.badDateExpiry = false;
+    self.noComponents = false;
+    self.requestComponents = [];
     self.wsUnits = '';
   }
 
@@ -123,13 +129,12 @@ angular.module('requestController', [])
       }
     }
     ModelService.get(MODEL_PATHS.licensePath + "/" + self.defineRequest.uid + MODEL_PATHS.commentAppendix, self.currentUser.authToken)
-      .then(function(response) {
-        //console.log("RC.viewRequest.getComments: response: " + JSON.stringify(response));
-        self.requestComments = response.comments;
-      }, function (error) {
-        //console.log("RC.viewRequest.getComments: error: " + JSON.stringify(error));
-      });
-    //console.log("RC.requestComponents: " + JSON.stringify(self.requestComponents));
+    .then(function(response) {
+      console.log("RC.viewRequest.getComments: response: " + JSON.stringify(response));
+      self.requestComments = response.comments;
+    }, function (error) {
+      console.log("RC.viewRequest.getComments: error: " + JSON.stringify(error));
+    });
    };
 
   this.editRequest = function() {

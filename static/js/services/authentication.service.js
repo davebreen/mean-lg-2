@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('authenticationServices', [])
-.service('Session', function ($rootScope, AUTH_PROPERTIES) {
+.service('Session', function () {
   this.create = function (sessionId, sessionUsername, sessionToken, sessionRole, sessionPermissions) {
     this.uid = sessionId;
     this.username = sessionUsername;
@@ -33,7 +33,7 @@ angular.module('authenticationServices', [])
     }
   }
 })
-.service('SessionStorage', function($window, $rootScope) {
+.service('SessionStorage', function($window) {
   this.confirmStorage = function(type){
     try {
       var storage = window[type];
@@ -70,7 +70,7 @@ angular.module('authenticationServices', [])
     window.sessionStorage.clear();
   }
 })
-.factory('AuthService', function ($http, $q, Session, SessionStorage, AUTH_PROPERTIES, USER_ROLES) {
+.factory('AuthService', function ($http, Session, SessionStorage, AUTH_PROPERTIES) {
   var ep_models = undefined;
   var authService = {};
   authService.submitAuth = function (credentials) {

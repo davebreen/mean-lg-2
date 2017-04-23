@@ -3,11 +3,9 @@ module.exports = function(app) {
   var index = require('./controllers');
 
   app.post('/api/auth', function(req, res) {
-    console.log("app.post(auth): " + JSON.stringify(req.body));
     var query  = Models.User.findOne({ username: req.body.username });
     var promise = query.exec();
     promise.then(function (user) {
-      console.log("app.post(auth) return: " + user);
       if(user !== null) {
         res.json({
           user: user,
@@ -26,7 +24,6 @@ module.exports = function(app) {
     var query  = Models.User.find();
     var promise = query.exec();
     promise.then(function (users) {
-      console.log("app.get(users): " + users);
       if(users !== null) {
         res.json({ users: users });
       }
@@ -39,11 +36,9 @@ module.exports = function(app) {
   });
 
   app.get('/api/users/:user_id', function(req, res) {
-    console.log("app.get(user_id): " + req.params.user_id);
     var query  = Models.User.findOne({ _id: req.params.user_id })
     var promise = query.exec();
     promise.then(function (user) {
-      console.log("app.get(user_id) return: " + user);
       if(user !== null) {
         res.json(user);
       }
@@ -60,7 +55,6 @@ module.exports = function(app) {
     var query  = Models.User.findOneAndUpdate({ _id: req.params.user_id }, req.body);
     var promise = query.exec();
     promise.then(function (user) {
-      console.log("app.put(user_id) return: " + JSON.stringify(user));
       if(user !== null) {
         res.json(user);
       }
@@ -73,7 +67,6 @@ module.exports = function(app) {
   });
 
   app.post('/api/users', function(req, res) {
-    console.log("app.post(user): "+ JSON.stringify(req.body));
     var user = new Models.User({
       username: req.body.username,
       password: req.body.password,
@@ -85,7 +78,6 @@ module.exports = function(app) {
     });
     var promise = user.save();
     promise.then(function (users) {
-      console.log("app.post(user) return: " + users);
       if(users !== null) {
         res.json(users);
       }
@@ -101,7 +93,6 @@ module.exports = function(app) {
     var query  = Models.User.findByIdAndRemove(req.params.user_id);
     var promise = query.exec();
     promise.then(function (users) {
-      console.log("app.delete(user): " + users);
       if(users !== null) {
         res.json(users);
       }
@@ -117,7 +108,6 @@ module.exports = function(app) {
     var query  = Models.License.find();
     var promise = query.exec();
     promise.then(function (licenses) {
-      console.log("app.get(licenses): " + licenses);
       if(licenses !== null) {
         res.json({ licenseRequestModels: licenses });
       }
@@ -220,7 +210,8 @@ module.exports = function(app) {
     var promise = query.exec();
     promise.then(function (comments) {
       if(comments !== null) {
-        res.json(comments);
+        console.log("GET - /api/licenses/:" + req.params.license_id + "/comments: " + comments);
+        res.json({ comments: comments });
       }
       else {
         res.json({ error: "Comments for License ID " + req.params.license_id + " not found ..." });
@@ -238,9 +229,10 @@ module.exports = function(app) {
       user : req.body.user_id
     });
     var promise = comment.save();
+    console.log("POST - /api/licenses/:" + req.params.license_id + "/comments: " + comment);
     promise.then(function (comments) {
       if(comments !== null) {
-        res.json(comments);
+        res.json({ comments: comments });
       }
       else {
         res.json({ error: "Error posting Comment for License ID " + req.params.license_id});
@@ -254,7 +246,6 @@ module.exports = function(app) {
     var query  = Models.Component.find();
     var promise = query.exec();
     promise.then(function (components) {
-      console.log("app.get(components): " + components);
       if(components !== null) {
         res.json({ components: components });
       }
@@ -270,7 +261,6 @@ module.exports = function(app) {
     var query  = Models.Customer.find();
     var promise = query.exec();
     promise.then(function (customers) {
-      console.log("app.get(customers): " + customers);
       if(customers !== null) {
         res.json({ customers: customers });
       }

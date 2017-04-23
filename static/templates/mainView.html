@@ -1,23 +1,23 @@
-<div class="admin-wrapper">
+<div ng-class="MC.currentUser.role === 'ADMIN' ? 'admin-wrapper' : 'standard-wrapper'">
   <div class="banner">
-    <button class="btn btn-default logout-button" ng-controller="LoginController as LC" ng-click="LC.logout()" ng-show="true" ng-cloak>{{ MC.currentUser.username }}: Logout</button>
-    <h4 class="main-header-admin">{{ MC.appTitle }}</h4>
+    <button class="btn btn-default logout-button" ng-controller="LoginController as LC" ng-click="LC.logout()" ng-cloak>{{ MC.currentUser.username }}: Logout</button>
+    <h4 ng-class="MC.currentUser.role === 'ADMIN' ? 'main-header-admin' : 'main-header-standard'">{{ MC.appTitle }}</h4>
   </div>
   <div class="container col-md-12 col-lg-12 col-sm-12 col-xs-12">
-    <div class="panel panel-danger control-top">
+    <div class="panel control-top" ng-class="MC.currentUser.role === 'ADMIN' ? 'panel-danger' : 'panel-primary'">
       <div class="panel-heading col-md-12 col-lg-12 col-sm-12 col-xs-12">
       </div>
       <div class="panel-body request-panel-body">
         <ul class="nav nav-tabs">
           <li class="active"><a switchtab="" data-toggle="collapse" href="#requestTab">License Requests</a></li>
-          <li><a switchtab="" data-toggle="collapse" href="#userTab">Users</a></li>
+          <li ng-if="MC.currentUser.role==='ADMIN'"><a switchtab="" data-toggle="collapse" href="#userTab">Users</a></li>
           <li><a switchtab="" data-toggle="collapse" href="#customerTab">Customers</a></li>
           <li><a switchtab="" data-toggle="collapse" href="#componentTab">Components</a></li>
         </ul>
         <div id="requestTab" class="collapse tab-pane fade in active">
           <request-component current-user="MC.currentUser" components="MC.components" customers="MC.customers"></request-component>
         </div>
-        <div id="userTab" class="collapse tab-pane fade">
+        <div id="userTab" class="collapse tab-pane fade" ng-if="MC.currentUser.role==='ADMIN'">
           <user-component current-user="MC.currentUser"></user-component>
         </div>
         <div id="customerTab" class="collapse tab-pane fade">

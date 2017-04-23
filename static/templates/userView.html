@@ -9,18 +9,17 @@
   <button
     ng-if="UC.addNewUser"
     class="btn btn-default request-btn col-md-3 col-lg-2 col-sm-4 col-xs-4"
-    ng-click="UC.addNewUser=!UC.addNewUser;UC.clearUser()">
+    ng-click="UC.clearUser()">
     <span class="glyphicon glyphicon-chevron-left"></span>
     Cancel
   </button>
   <button
     ng-if="UC.modifyUser"
     class="btn btn-default request-btn col-md-3 col-lg-2 col-sm-4 col-xs-4"
-    ng-click="UC.modifyUser=!UC.modifyUser;UC.clearUser()">
+    ng-click="UC.clearUser()">
     <span class="glyphicon glyphicon-chevron-left"></span>
     Cancel
   </button>
-</div>
 </div>
 <div class="overflow-div" ng-if="UC.users.length > 0 && !UC.addNewUser && !UC.modifyUser">
   <table class="table table-striped table-admin table-condensed user-table">
@@ -38,4 +37,3 @@
   </table>
 </div>
 <div ng-if="UC.addNewUser || UC.modifyUser" ng-include="'templates/userForm.html'"></div>
-<!--<div ng-if="UC.modifyUser" ng-include="'templates/editUserForm.html'"></div>-->

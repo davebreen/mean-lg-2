@@ -53,10 +53,10 @@ angular.module('mainController', [])
 
   this.setUp = function (userRole) {
     self.getRequests();
+    self.getComponents();
+    self.getCustomers();
     if(userRole === USER_ROLES.admin) {
       self.getUsers();
-      self.getComponents();
-      self.getCustomers();
     }
   };
 

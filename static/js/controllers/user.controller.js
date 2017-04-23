@@ -32,7 +32,7 @@ angular.module('userController', [])
         }
       }
     }
-    if(self.defineUser.permissions === undefined)
+    if(self.currentPermissions === undefined || self.currentPermissions.length < 1)
     {
       var ok = confirm("This User has no permissions");
       console.log("OK - " + ok);
@@ -57,48 +57,40 @@ angular.module('userController', [])
     }
     ModelService.create(MODEL_PATHS.userPath, self.defineUser, self.currentUser.authToken)
     .then(function(response) {
-      self.mismatch = false;
       self.clearUser();
       self.users = response.users;
     }, function (error) {
       console.log("UC.newUser: ERROR = " + JSON.stringify(error));
     });
-    self.addNewUser = false;
   };
 
   this.viewUser = function (user) {
     if(user.permissions !== undefined) {
-      var permissions = [];
       for (let permission of user.permissions) {
         self.currentPermissions.push(permission.value);
       }
-      self.defineUser.permissions = permissions;
     }
     self.defineUser = user;
     console.log("UC.viewUser: UC.defineUser.permissions = " + JSON.stringify(self.defineUser.permissions));
   };
+
   this.updateUser = function (user) {
-    if((self.updatePassword && self.defineUser.password == self.passwordMatch)
-    || !self.updatePassword)
-    {
-      self.defineUser.permissions = [];
-      for (let permission of self.currentPermissions) {
-        self.defineUser.permissions.push({value :permission});
-      }
-      self.currentPermissions = [];
-      ModelService.update(MODEL_PATHS.userPath, self.defineUser.uid, self.defineUser, self.currentUser.authToken)
-      .then(function(response) {
-        if(self.defineUser.uid === self.currentUser.uid)
-        {
-          self.defineUser.authToken = self.currentUser.authToken;
-          $rootScope.$broadcast(AUTH_PROPERTIES.currentUserChanged, self.defineUser);
-        }
-        self.defineUser = {};
-        self.modifyUser = false;
-      }, function (error) {
-        console.log("UC.updateUser: ERROR = " + JSON.stringify(error));
-      });
+    self.defineUser.permissions = [];
+    for (let permission of self.currentPermissions) {
+      self.defineUser.permissions.push({value :permission});
     }
+    self.currentPermissions = [];
+    ModelService.update(MODEL_PATHS.userPath, self.defineUser.uid, self.defineUser, self.currentUser.authToken)
+    .then(function(response) {
+      if(self.defineUser.uid === self.currentUser.uid)
+      {
+        self.defineUser.authToken = self.currentUser.authToken;
+        $rootScope.$broadcast(AUTH_PROPERTIES.currentUserChanged, self.defineUser);
+      }
+      self.clearUser();
+    }, function (error) {
+      console.log("UC.updateUser: ERROR = " + JSON.stringify(error));
+    });
   };
 
   this.updatePermissions = function (permission, includePermission) {
@@ -114,8 +106,12 @@ angular.module('userController', [])
 
   this.clearUser = function () {
     self.defineUser = {};
+    self.addNewUser = false;
+    self.modifyUser = false;
     self.passwordMatch = '';
+    self.mismatch = false;
     self.currentPermissions = [];
+    self.changePassword = false;
   };
 
   $scope.$on(APP_EVENTS.setUpComplete, function () {
