@@ -73,10 +73,17 @@ body
   float: right;
 }
 
-.control-top
+.table-div
 {
-  height: 75rem;
+  height: 60vh;
+  overflow: auto;
 }
+
+.order-icons
+{
+  
+}
+
 .no-requests-note
 {
   padding-top: 6rem;
@@ -107,12 +114,6 @@ th, td
 .td-text
 {
    padding-bottom: -0.5rem;
-}
-
-.overflow-div
-{
-  max-height: 60rem;
-  overflow: auto;
 }
 
 .pending-note
@@ -261,11 +262,6 @@ input[type="text"]:disabled {
 {
   width: 25%;
   padding-right: 4rem;
-}
-
-.panel-right
-{
-
 }
 
 .notify-header
